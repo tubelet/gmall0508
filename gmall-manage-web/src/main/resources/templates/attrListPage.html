@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>平台属性管理</title>
+</head>
+<body>
+    <table class="easyui-datagrid" title="属性列表"
+           data-options="toolbar:'#tb',url:'datagrid_data.json',fitColumns:true,singleSelect:true,collapsible:true">
+        <thead>
+        <tr>
+            <th data-options="field:'id',width:100">属性id</th>
+            <th data-options="field:'attrName',width:400">属性名称</th>
+            <!--<th data-options="field:'price',width:100,align:'right'">Price</th>-->
+        </tr>
+        </thead>
+    </table>
+
+    <!-- 商品详情列表 -->
+    <div style="margin-top: 10px">
+
+    </div>
+
+    <div id="tb">
+        <!-- 三个控件按钮 -->
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">编辑</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">删除</a>
+
+        <br>
+        <div>
+            一级分类：<input id="cc1" class="easyui-combobox" data-options="
+                valueField: 'id',
+                textField: 'name',
+                url: 'getCatalog1',
+                onSelect: function(rec){
+                var url = 'get_data2.php?id='+rec.id;
+                $('#cc2').combobox('reload', url);
+            }">
+            二级分类：<input id="cc2" class="easyui-combobox" data-options="
+                valueField: 'id',
+                textField: 'text',
+                url: 'getCatalog2',
+                onSelect: function(rec){
+                var url = 'get_data2.php?id='+rec.id;
+                $('#cc3').combobox('reload', url);
+            }">
+            三级分类：<input id="cc3" class="easyui-combobox" data-options="
+                valueField:'id',
+                url: 'getCatalog3',
+                textField:'text'">
+        </div>
+
+    </div>
+
+</body>
+
+<!--$('#dg').datagrid({
+toolbar: '#tb'
+});-->
+
+</html>
