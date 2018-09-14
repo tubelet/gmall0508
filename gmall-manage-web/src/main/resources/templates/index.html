@@ -14,7 +14,7 @@
         <div id="aa" class="easyui-accordion" style="width:180px;height:200px;">
             <div title="基本信息管理" data-options="iconCls:'icon-save'" style="overflow:auto;padding:10px;">
                 <ul>
-                    <li><a href="JavaScript:add_tap('平台属性管理','attrListPage');">属性管理</a></li>
+                    <li><a href="JavaScript:add_tab('平台属性管理','attrListPage');">属性管理</a></li>
                 </ul>
             </div>
             <div title="商品信息管理" data-options="iconCls:'icon-save'" style="overflow:auto;padding:10px;">
@@ -34,10 +34,26 @@
     </div>
     <div data-options="region:'south',border:false" style="height:50px;background:#A9FACD;padding:10px;">south region</div>
     <div data-options="region:'center',title:'中部'">
-        <div id="tt" class="easyui-tabs">
+        <div id="tt" class="easyui-tabs" data-options="closable:true">
 
         </div>
     </div>
+
+    <script language="JavaScript">
+        function add_tab(title,url) {
+
+            if ($('#tt').tabs('exists', title)) {
+                $('#tt').tabs('select', title);
+            } else {
+                $('#tt').tabs('add',{
+                    title: title,
+                    href: url,
+                    closable:true
+                });
+            }
+        }
+    </script>
+
 </body>
 
 <script language="JavaScript">
