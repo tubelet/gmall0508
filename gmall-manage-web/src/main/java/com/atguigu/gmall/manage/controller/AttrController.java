@@ -33,4 +33,5 @@ public class AttrController {
         attrService.saveAttr(baseAttrInfo);
         return "success";
     }
+
 }
