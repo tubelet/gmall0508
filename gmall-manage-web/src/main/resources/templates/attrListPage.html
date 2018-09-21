@@ -71,10 +71,12 @@
     </div>
     <div id="bb">
         <a href="javascript:save_attr();" class="easyui-linkbutton">保存</a>
-        <a href="#" class="easyui-linkbutton">关闭</a>
+        <a href="javascript:close_attr();" class="easyui-linkbutton">关闭</a>
     </div>
 
     <script language="JavaScript">
+        var sId = '';
+
         function reloadAttrList(){
             var catalog3Id = $("#cc3").combobox("getValue");
                 $("#dg").datagrid({
@@ -83,30 +85,44 @@
         }
 
         function reloadAttrValue(){
-            var sId = $("#dg").datagrid('getSelected').id;
+            var Id = $("#dg").datagrid('getSelected').id;
             $("#dg_av").datagrid({
-                url:"getAttrValue?id="+sId
+                url:"getAttrValue?id="+Id
+            });
+        }
+
+        function nullAttrValue(){
+            var Id = '';
+            $("#dg_av").datagrid({
+                url:"getAttrValue?id="+Id
             });
         }
 
         function addAttrInfo() {
-            // 获取三级分类id
-            var catalog3Id = $("#cc3").combobox("getValue");
-
-            $("#dlg").dialog("open");
+            $('#attrName').textbox('setValue','');
+            sId = '';
+            nullAttrValue();
             // 调用属性添加对话框的初始化函数
+            $("#dlg").dialog("open");
+
             initAttrValueDatagrid();
         }
 
         function editAttrInfo() {
             var sName = $("#dg").datagrid('getSelected').attrName;
+            sId = $("#dg").datagrid('getSelected').id;
             $('#attrName').textbox('setValue',sName);
             //alert(sName);
             // 获取三级分类id
             reloadAttrValue();
-            $("#dlg").dialog("open");
             // 调用属性添加对话框的初始化函数
+            $("#dlg").dialog("open");
+
             initAttrValueDatagrid();
+        }
+
+        function close_attr() {
+            $("#dlg").dialog("close");
         }
 
         function save_attr() {
@@ -114,7 +130,6 @@
             var  baseAttrInfo = {};
 
             // 三级分类id
-            var sId = $("#dg").datagrid('getSelected').id;
             var catalog3Id = $("#cc3").combobox("getValue");
             if(!catalog3Id){
                 catalog3Id = "61";
@@ -124,9 +139,12 @@
             var attrName = $("#attrName").textbox("getValue");
             baseAttrInfo["attrName"] = attrName;
             //alert(sId)
-            baseAttrInfo["id"] = sId;
+            if (sId != '') {
+                baseAttrInfo["id"] = sId;
+            }
             // 获得dg_av中已经添加的属性值数据
             var rows = $("#dg_av").datagrid("getRows");
+            //alert(rows.value);
             $(rows).each(function(i,json){
                 var valueName = json.valueName;
                 baseAttrInfo["attrValueList["+i+"].valueName"] = valueName;
@@ -134,6 +152,7 @@
 
             // 异步将属性和属性值的数据对象提交到后台，保存属性数据
             $.get("saveAttr",baseAttrInfo,function(data){
+                alert(sId)
                 //alert(data);
             });
             reloadAttrList();
@@ -142,8 +161,15 @@
         }
 
         function delAttrInfo() {
-
-            reloadAttrList();
+            var delId = $("#dg").datagrid('getSelected').id;
+            //alert(delId);
+            $.ajax({
+                url:"delAttr?id="+delId,
+                type:"DELETE",
+                success:function(data){
+                    reloadAttrList();//刷新本页
+                }
+            })
         }
 
         function initAttrValueDatagrid() {
@@ -161,7 +187,11 @@
                 },'-',{
                     iconCls: 'icon-remove',
                     handler: function(){
-                        alert('删除按钮');
+                        // 删除被选中的行
+                        // 1 获得被选中的行 2 获得行索引 3 根据行索引删除当前行
+                        var selectRow = $("#dg_av").datagrid("getSelected");
+                        var rowIndex = $("#dg_av").datagrid("getRowIndex",selectRow);
+                        $("#dg_av").datagrid("deleteRow",rowIndex);
                     }
                 }],
                 columns:[[

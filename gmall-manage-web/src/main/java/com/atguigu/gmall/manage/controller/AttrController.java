@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.atguigu.gmall.bean.BaseAttrInfo;
 import com.atguigu.gmall.bean.BaseAttrValue;
 import com.atguigu.gmall.service.AttrService;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +32,12 @@ public class AttrController {
     @RequestMapping("/saveAttr")
     public String saveAttr(BaseAttrInfo baseAttrInfo){
         attrService.saveAttr(baseAttrInfo);
+        return "success";
+    }
+
+    @DeleteMapping("/delAttr")
+    public String delAttr(@RequestParam("id")String delId){
+        attrService.delAttr(delId);
         return "success";
     }
 

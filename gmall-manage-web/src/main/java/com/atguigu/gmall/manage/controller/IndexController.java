@@ -11,8 +11,18 @@ public class IndexController {
         return "index";
     }
 
-    @RequestMapping("attrListPage")
+    @RequestMapping("/attrListPage")
     public String attrListPage(){
         return "attrListPage";
+    }
+
+    @RequestMapping("/spuListPage")
+    public String spuListPage(){
+        return "spuListPage";
+    }
+
+    @RequestMapping("/spuInfoPage")
+    public String spuInfoPage(){
+        return "spuInfoPage";
     }
 }
