@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spu商品管理</title>
+</head>
+<body>
+<div class="easyui-panel" title=""  data-options="border:true">
+    <!-----------------列表 ----------------------------->
+    <table id="spulist_dg" class="easyui-datagrid" title="spu列表"
+           data-options="singleSelect:true,method:'get' ,toolbar:'#spulist_tb'">
+        <thead>
+        <tr>
+            <th data-options="field:'id'" width="10%">商品id </th>
+            <th data-options="field:'spuName'" width="30%">商品名称</th>
+            <th data-options="field:'description'" width="60%">商品描述 </th>
+        </tr>
+        </thead>
+    </table>
+    <!-----------------列表的工具栏----------------------------->
+    <div id="spulist_tb" style="padding:5px;height:auto">
+        <div style="margin-bottom:5px">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addSpuInfo()">添加</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editSpuInfo()">编辑</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="delSpuInfo()">删除</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addSkuInfo()">增加sku</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="showSkuInfoList()"> sku列表</a>
+        </div>
+        <div>
+            一级分类：<input id="cc1" class="easyui-combobox" data-options="
+                valueField: 'id',
+                textField: 'name',
+                url: 'getCatalog1',
+                onSelect: function(rec){
+                $('#cc2').combobox('clear');
+                $('#cc3').combobox('clear');
+                var url = 'getCatalog2?id='+rec.id;
+                $('#cc2').combobox('reload', url);
+            }">
+            二级分类：<input id="cc2" class="easyui-combobox" data-options="
+                valueField: 'id',
+                textField: 'name',
+                url: 'getCatalog2',
+                onSelect: function(rec){
+                $('#cc2').combobox('clear');
+                $('#cc3').combobox('clear');
+                var url = 'getCatalog3?id='+rec.id;
+                $('#cc3').combobox('reload', url);
+            }">
+            三级分类：<input id="cc3" class="easyui-combobox" data-options="
+                valueField:'id',
+                url: 'getCatalog3',
+                textField:'name'">
+            <a href="javascript:reloadSpuList();"  class="easyui-linkbutton" data-options="iconCls:'icon-search'">刷新属性列表</a>
+        </div>
+    </div>
+</div>
+
+<div th:include="spuInfoPage"></div>
+
+<!--<div th:include="skuInfoPage"></div>
+
+<div th:include="skuListPage"></div>-->
+
+
+<script language="JavaScript">
+    function addSpuInfo() {
+        // 打开spu添加的对话框
+        $("#spu_dlg").dialog("open");
+
+        // 初始化spu对话框中的控件
+        initSpuInfoDlg();
+    }
+
+    function reloadSpuList(){
+        var ctg3val=$("#cc3").combobox('getValue');
+        $('#spulist_dg').datagrid({url:'spuList?catalog3Id='+ctg3val});
+    }
+
+    function editSpuInfo(){
+        var spuInfo = $('#spulist_dg').datagrid('getSelected');
+        if (spuInfo) {
+            $('#spu_dlg').dialog("open");
+            initSpuInfoDlg(spuInfo);
+        }
+
+    }
+
+    function delSpuInfo() {
+        var spuInfoId = $('#spulist_dg').datagrid('getSelected').id;
+        $.ajax({
+            url:"delSpuInfo?spuInfoId="+spuInfoId,
+            type:"DELETE",
+            success:function(data){
+                reloadSpuList();//刷新本页
+            }
+        })
+    }
+
+    function addSkuInfo() {
+        var spuRow = $('#spulist_dg').datagrid('getSelected');
+        var ctg3val=$("#ctg3ForSpuList").combobox('getValue');
+        initSkuInfoDlg(spuRow.id,'',ctg3val);//在skuInfoPage.html中
+
+    }
+
+    function addSkuInfo() {
+        var spuRow = $('#spulist_dg').datagrid('getSelected');
+        var ctg3val=$("#ctg3ForSpuList").combobox('getValue');
+        initSkuInfoDlg(spuRow.id,'',ctg3val);//在skuInfoPage.html中
+
+    }
+
+</script>
+</body>
+</html>
