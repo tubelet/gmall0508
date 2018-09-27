@@ -41,13 +41,54 @@
     }
 
     function addSpuSaleAttrValue() {
+        var selectId = $("#saleAttrSelect").combobox("getValue");
+        //alert(selectId);
         // 追加一行属性值的列表
-        $("#spuSaleAttrValueDg").datagrid("appendRow",{
-            id:"",
-            valueName:"默认销售属性值"
+        if (selectId){
+            $("#spuSaleAttrValueDg").datagrid("appendRow",{
+                id:"",
+                valueName:"默认销售属性值"
+            });
+        }
+    }
+
+    function removeSpuSaleAttrValue() {
+        // 删除被选中的行
+        // 1 获得被选中的行 2 获得行索引 3 根据行索引删除当前行
+        var selectRow = $("#spuSaleAttrValueDg").datagrid("getSelected");
+        var rowIndex = $("#spuSaleAttrValueDg").datagrid("getRowIndex",selectRow);
+        $("#spuSaleAttrValueDg").datagrid("deleteRow",rowIndex);
+    }
+    
+    function saveSpuSaleAttr() {
+        // 获得销售属性信息
+        var saleAttrId = $("#saleAttrSelect").combobox("getValue");
+        var saleAttrName = $("#saleAttrSelect").combobox("getText");
+
+        //alert(saleAttrId)
+        // 获得销售属性值列表
+        var spuSaleAttrValueJson = $("#spuSaleAttrValueDg").datagrid("getData");
+        console.log(JSON.stringify(spuSaleAttrValueJson));
+
+        var rowIndex = $("#spuSaleAttrDg").datagrid("getRowIndex",saleAttrId);
+
+        if(rowIndex>=0){
+            $("#spuSaleAttrDg").datagrid("deleteRow",rowIndex);
+        }
+
+        // 将销售属性和销售属性值列表保存到上一个页面
+        $("#spuSaleAttrDg").datagrid("appendRow",{
+            saleAttrId:saleAttrId,
+            saleAttrName:saleAttrName,
+            spuSaleAttrValueJson:spuSaleAttrValueJson
         });
 
+        // 关闭销售属性对话框
+        $("#spuSaleAttr_dlg").dialog("close");
     }
+
+    
+
 
 </script>
 

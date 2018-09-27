@@ -1,7 +1,12 @@
 package com.atguigu.gmall.manage.mapper;
 
-import com.atguigu.gmall.bean.BaseSaleAttr;
+import com.atguigu.gmall.bean.SpuSaleAttr;
 import tk.mybatis.mapper.common.Mapper;
 
-public interface SpuSaleAttrMapper extends Mapper<BaseSaleAttr> {
+import java.util.List;
+
+
+public interface SpuSaleAttrMapper extends Mapper<SpuSaleAttr> {
+
+    public List<SpuSaleAttr> selectSpuSaleAttrList(long spuId);
 }

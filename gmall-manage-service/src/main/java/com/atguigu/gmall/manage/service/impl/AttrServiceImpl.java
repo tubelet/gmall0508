@@ -85,5 +85,11 @@ public class AttrServiceImpl implements AttrService {
         baseAttrValueMapper.deleteByExample(example1);
     }
 
+    @Override
+    public List<BaseAttrInfo> selectAttrInfoList(long catalog3Id) {
+        List<BaseAttrInfo> baseAttrInfos = baseAttrInfoMapper.selectAttrInfoList(catalog3Id);
+        return baseAttrInfos;
+    }
+
 
 }

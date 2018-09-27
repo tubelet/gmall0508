@@ -18,8 +18,8 @@ public class AttrController {
     AttrService attrService;
 
     @RequestMapping("/getAttrListByCtg3")
-    public List<BaseAttrInfo> getAttrListByCtg3(@RequestParam("id")Integer id){
-        List<BaseAttrInfo> attrListByCtg3 = attrService.getAttrListByCtg3(id);
+    public List<BaseAttrInfo> getAttrListByCtg3(@RequestParam("id")String id){
+        List<BaseAttrInfo> attrListByCtg3 = attrService.selectAttrInfoList(Long.parseLong(id));
         return attrListByCtg3;
     }
 

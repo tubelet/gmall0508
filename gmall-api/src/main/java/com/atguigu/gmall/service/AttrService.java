@@ -14,4 +14,6 @@ public interface AttrService {
     void saveAttr(BaseAttrInfo baseAttrInfo);
 
     void delAttr(String delId);
+
+    List<BaseAttrInfo> selectAttrInfoList(long catalog3Id);
 }
