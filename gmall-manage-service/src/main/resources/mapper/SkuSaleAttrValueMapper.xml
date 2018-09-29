@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.atguigu.gmall.manage.mapper.SkuSaleAttrValueMapper">
-    <select id="selectSpuSaleAttrListCheckBySku" resultMap="selectSpuSaleAttrListCheckBySkuMap">
+    <select id="selectSpuSaleAttrListCheckBySku"  resultMap="selectSpuSaleAttrListCheckBySkuMap">
         SELECT
             sa.id AS sa_id,
             sa.*,
@@ -21,20 +21,31 @@
     </select>
 
     <resultMap id="selectSpuSaleAttrListCheckBySkuMap" type="com.atguigu.gmall.bean.SpuSaleAttr" autoMapping="true">
+
         <result column="sa_id" property="id"></result>
+
         <collection property="spuSaleAttrValueList" ofType="com.atguigu.gmall.bean.SpuSaleAttrValue" autoMapping="true">
             <result column="sv_id" property="id"></result>
         </collection>
+
     </resultMap>
-    <select  id ="selectSkuSaleAttrValueListBySpu" parameterType="long" resultMap="skuSaleAttrValueMap">
-        SELECT  skv.*
-        FROM sku_sale_attr_value skv
-        INNER JOIN  sku_info  sk  ON skv.sku_id =sk.id
-        where  sk.spu_id=#{spuId}
-        ORDER BY skv.sku_id , skv.sale_attr_id
+
+
+    <select id="selectSkuSaleAttrValueListBySpu" parameterType="int" resultMap="selectSkuSaleAttrValueListBySpuMap">
+        Select sku.id as sku_id ,sku.*,ssav.id as sku_sale_attr_value_id ,ssav.*
+        from
+        sku_info sku , sku_sale_attr_value ssav
+        where
+        sku.id = ssav.sku_id
+        and
+        sku.spu_id = #{spuId}
     </select>
-    <resultMap id="skuSaleAttrValueMap" type="com.atguigu.gmall.bean.SkuSaleAttrValue" autoMapping="true">
-        <result property="id" column="id" ></result>
+
+    <resultMap id="selectSkuSaleAttrValueListBySpuMap" type="com.atguigu.gmall.bean.SkuInfo" autoMapping="true">
+        <result property="id" column="sku_id"></result>
+        <collection property="skuSaleAttrValueList" ofType="com.atguigu.gmall.bean.SkuSaleAttrValue" autoMapping="true">
+            <result property="id" column="sku_sale_attr_value_id"></result>
+        </collection>
     </resultMap>
 
 
